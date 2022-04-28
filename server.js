@@ -100,7 +100,8 @@ app.delete('/api/users/:id', ({ params }, res) => {
 app.post('/api/users/:id/friends/:friendId', ({ params, body }, res) => {
     User.findOneAndUpdate(
         { _id: params.id },
-        {"$push": {friends: params.friendId}},
+        // addToSet method adds a single item to the array without allowing duplicates
+        {"$addToSet": {friends: params.friendId}},
         { new: true }
       )
       .then(dbUser => {
@@ -114,6 +115,27 @@ app.post('/api/users/:id/friends/:friendId', ({ params, body }, res) => {
         res.json(err);
       });
 });
+
+// DELETE - Remove Friend From Existing User
+app.delete('/api/users/:id/friends/:friendId', ({ params, body }, res) => {
+    User.findOneAndUpdate(
+        { _id: params.id },
+        // Pull method pulls a single item from the array
+        {"$pull": {friends: params.friendId}},
+        { new: true }
+      )
+      .then(dbUser => {
+        if (!dbUser) {
+          res.json({ message: 'No user found with this id!' });
+          return;
+        }
+        res.json(dbUser);
+      })
+      .catch(err => {
+        res.json(err);
+      });
+});
+// End of Friend Routes
 
 
 // Start server and listen
