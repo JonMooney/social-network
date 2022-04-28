@@ -20,7 +20,18 @@ const reactionSchema = new Schema({
   createdAt: {
       type: Date,
       default: Date.now,
+      // Getter method
+      get: (date) => {
+        if (date) return date.toISOString().split("T") [0];
+      },
   }
-});
+},
+{
+    toJSON: {
+      getters: true
+    },
+    id: false
+}
+);
 
 module.exports = noteSchema;
