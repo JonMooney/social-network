@@ -1,3 +1,4 @@
+const { response } = require('express');
 const express = require('express');
 const mongoose = require('mongoose');
 
@@ -28,6 +29,7 @@ app.get('/api/users', (req, res) => {
     User.find({})
     // Populate fills in the actual user data (from just the IDs in the friends array)  
     .populate('friends')
+    .populate('thoughts')
       .then(dbUsers => {
         res.json(dbUsers);
       })
@@ -40,6 +42,7 @@ app.get('/api/users', (req, res) => {
 app.get('/api/users/:id', (req, res) => {
     User.findById(req.params.id)
       .populate('friends')
+      .populate('thoughts')
       .then(dbUser => {
         res.json(dbUser);
       })
@@ -136,6 +139,88 @@ app.delete('/api/users/:id/friends/:friendId', ({ params, body }, res) => {
       });
 });
 // End of Friend Routes
+
+
+//////////////////////////////
+// Thought Routes
+//////////////////////////////
+
+// GET All Thoughts
+app.get('/api/thoughts', (req, res) => {
+    Thought.find({})
+    // Populate fills in the actual reaction data (from just the IDs in the reactions array)
+    .populate('reactions')
+      .then(dbThoughts => {
+        res.json(dbThoughts);
+      })
+      .catch(err => {
+        res.json(err);
+      });
+});
+
+// GET Single Thought by ID
+app.get('/api/thoughts/:id', (req, res) => {
+    Thought.findById(req.params.id)
+      .populate('reactions')
+      .then(dbThought => {
+        res.json(dbThought);
+      })
+      .catch(err => {
+        res.json(err);
+      });
+});
+
+// POST New Thought
+app.post('/api/thoughts', ({ body }, res) => {
+    Thought.create(body)
+        .then(({ _id, username }) =>
+        // Update User model with new thought
+        User.findOneAndUpdate(
+            // Find User by username
+            {username},
+            // Push to array by the deconstructed id value
+            { $push: { thoughts: _id } },
+            { new: true }
+        )
+        )
+        .then(dbUser => {
+        res.json(dbUser);
+        })
+        .catch(err => {
+        res.json(err);
+        });
+});
+
+// PUT - Update Existing Thought
+app.put('/api/thoughts/:id', ({ params, body }, res) => {
+    Thought.findOneAndUpdate({ _id: params.id }, body, { new: true })
+      .then(dbThought => {
+        if (!dbThought) {
+          res.json({ message: 'No thought found with this id!' });
+          return;
+        }
+        res.json(dbThought);
+      })
+      .catch(err => {
+        res.json(err);
+      });
+});
+
+// DELETE Single Thought by ID
+app.delete('/api/thoughts/:id', ({ params }, res) => {
+    Thought.findOneAndDelete({ _id: params.id })
+      .then(dbThought => {
+        if (!dbThought) {
+          res.json({ message: 'No thought record found with this id!' });
+          return;
+        }
+        res.json(dbThought);
+      })
+      .catch(err => {
+        res.json(err);
+      });
+});
+// End of Thought Routes
 
 
 // Start server and listen

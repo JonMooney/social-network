@@ -10,18 +10,18 @@ const thoughtSchema = new Schema({
     maxlength: 280
   },
 
-  createdAt: {
-      type: Date,
-      default: Date.now,
-      // Getter method
-      get: (date) => {
-        if (date) return date.toISOString().split("T") [0];
-      },
-  },
-  
   username: {
     type: String,
     required: 'Username is Required'
+  },
+
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    // Getter method
+    get: (date) => {
+      if (date) return date.toISOString().split("T") [0];
+    },
   },
 
   reactions: [reactionSchema],
