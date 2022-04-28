@@ -69,11 +69,34 @@ app.put('/api/users/:id', ({ params, body }, res) => {
       .catch(err => {
         res.json(err);
       });
-  });
+});
 
 // DELETE Single User by ID
 app.delete('/api/users/:id', ({ params }, res) => {
     User.findOneAndDelete({ _id: params.id })
+      .then(dbUser => {
+        if (!dbUser) {
+          res.json({ message: 'No user found with this id!' });
+          return;
+        }
+        res.json(dbUser);
+        // Bonus - Delete associated thoughts from this user
+        Thought.find({username: dbUser.username}).remove();
+      })
+      .catch(err => {
+        res.json(err);
+      });
+});
+// End of User Routes
+
+//////////////////////////////
+// Friend Routes
+//////////////////////////////
+
+// POST - Add Friend to Existing User
+// Not adding all user data to friends array
+app.post('/api/users/:id/friends/:friendId', ({ params, body }, res) => {
+    User.findOneAndUpdate({ _id: params.id }, {"$push": {friends: params.friendId}}, { new: true })
       .then(dbUser => {
         if (!dbUser) {
           res.json({ message: 'No user found with this id!' });
@@ -85,6 +108,7 @@ app.delete('/api/users/:id', ({ params }, res) => {
         res.json(err);
       });
 });
+
 
 // Start server and listen
 app.listen(PORT, () => {
