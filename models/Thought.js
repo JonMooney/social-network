@@ -36,10 +36,10 @@ const thoughtSchema = new Schema({
 );
 
 // Virtual
-UserSchema.virtual('reactionCount').get(function() {
+thoughtSchema.virtual('reactionCount').get(function() {
     return this.reactions.length;
   });
 
-const User = model('User', UserSchema);
+const Thought = model('Thought', thoughtSchema);
 
-module.exports = User;
+module.exports = Thought;

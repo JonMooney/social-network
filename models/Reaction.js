@@ -34,4 +34,4 @@ const reactionSchema = new Schema({
 }
 );
 
-module.exports = noteSchema;
+module.exports = reactionSchema;

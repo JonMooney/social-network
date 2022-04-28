@@ -72,7 +72,7 @@ app.put('/api/users/:id', ({ params, body }, res) => {
   });
 
 // DELETE Single User by ID
-app.delete('/api/users/delete/:id', ({ params }, res) => {
+app.delete('/api/users/:id', ({ params }, res) => {
     User.findOneAndDelete({ _id: params.id })
       .then(dbUser => {
         if (!dbUser) {
