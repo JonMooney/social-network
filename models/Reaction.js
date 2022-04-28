@@ -1,15 +1,26 @@
 const { Schema, Types } = require('mongoose');
 
-const noteSchema = new Schema({
-  noteId: {
+const reactionSchema = new Schema({
+  reactionId: {
     type: Schema.Types.ObjectId,
-    default: () => new Types.ObjectId(),
+    default: () => new Types.ObjectId()
   },
 
-  noteText: {
-    type: String,
-    required: true,
+  reactionBody: {
+      type: String,
+      required: 'Reaction Body is Required',
+      maxlength: 280
   },
+
+  username: {
+    type: String,
+    required: 'Username is Required'
+  },
+
+  createdAt: {
+      type: Date,
+      default: Date.now,
+  }
 });
 
 module.exports = noteSchema;

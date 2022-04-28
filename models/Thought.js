@@ -19,8 +19,15 @@ const thoughtSchema = new Schema({
     required: 'Username is Required'
   },
 
-  reactions: [reactionSchema]
-});
+  reactions: [reactionSchema],
+},
+{
+    toJSON: {
+      virtuals: true
+    },
+    id: false
+}
+);
 
 UserSchema.virtual('reactionCount').get(function() {
     return this.reactions.length;
