@@ -26,6 +26,8 @@ mongoose.set('debug', true);
 // GET All Users
 app.get('/api/users', (req, res) => {
     User.find({})
+    // Populate fills in the actual user data (from just the IDs in the friends array)  
+    .populate('friends')
       .then(dbUsers => {
         res.json(dbUsers);
       })
@@ -37,6 +39,7 @@ app.get('/api/users', (req, res) => {
 // GET Single User by ID
 app.get('/api/users/:id', (req, res) => {
     User.findById(req.params.id)
+      .populate('friends')
       .then(dbUser => {
         res.json(dbUser);
       })
@@ -94,9 +97,12 @@ app.delete('/api/users/:id', ({ params }, res) => {
 //////////////////////////////
 
 // POST - Add Friend to Existing User
-// Not adding all user data to friends array
 app.post('/api/users/:id/friends/:friendId', ({ params, body }, res) => {
-    User.findOneAndUpdate({ _id: params.id }, {"$push": {friends: params.friendId}}, { new: true })
+    User.findOneAndUpdate(
+        { _id: params.id },
+        {"$push": {friends: params.friendId}},
+        { new: true }
+      )
       .then(dbUser => {
         if (!dbUser) {
           res.json({ message: 'No user found with this id!' });
