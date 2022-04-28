@@ -223,6 +223,30 @@ app.delete('/api/thoughts/:id', ({ params }, res) => {
 // End of Thought Routes
 
 
+//////////////////////////////
+// Reaction Routes
+//////////////////////////////
+
+// POST New Reaction in Thought Model
+app.post('/api/thoughts/:thoughtId/reactions', ({ body, params }, res) => {
+    Thought.findOneAndUpdate(
+        { _id: params.thoughtId },
+        { $push: { reactions: body } },
+        { new: true }
+    )
+    .then(dbThought => {
+        res.json(dbThought);
+        })
+        .catch(err => {
+        res.json(err);
+        });
+});
+
+
+// DELETE Reaction by the reactionId
+
+
+
 // Start server and listen
 app.listen(PORT, () => {
   console.log(`App running on port ${PORT}!`);
