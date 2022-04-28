@@ -1,37 +1,29 @@
 const { Schema, model } = require('mongoose');
+const reactionSchema = require('./Reaction');
 
 const thoughtSchema = new Schema({
+  thoughtText: {
+    type: String,
+    required: 'Thought Text is Required',
+    minlength: 1,
+    maxlength: 280
+  },
+
+  createdAt: {
+      type: Date,
+      default: Date.now
+  },
+  
   username: {
     type: String,
-    unique: true,
-    trim: true,
     required: 'Username is Required'
   },
 
-  email: {
-    type: String,
-    unique: true,
-    match: [/.+@.+\..+/],
-    required: 'Email is Required'
-  },
-
-  thoughts: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Thought'
-    }
-  ],
-
-  friends: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'User'
-    }
-  ]
+  reactions: [reactionSchema]
 });
 
-UserSchema.virtual('friendCount').get(function() {
-    return this.friends.length;
+UserSchema.virtual('reactionCount').get(function() {
+    return this.reactions.length;
   });
 
 const User = model('User', UserSchema);
