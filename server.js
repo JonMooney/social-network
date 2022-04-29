@@ -89,7 +89,7 @@ app.delete('/api/users/:id', ({ params }, res) => {
         
         // Bonus - Delete associated thoughts from this user
         Thought.remove({username: dbUser.username})
-        //.then(del => console.log(del)); // Use to see deletedCount
+        .then(del => console.log(del)); // Use to see deletedCount
 
         res.status('200').json({message: 'User and associated thoughts successfully deleted!'});
       })
