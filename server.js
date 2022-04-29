@@ -1,10 +1,11 @@
-const { response } = require('express');
+// Bring in dependencies
 const express = require('express');
 const mongoose = require('mongoose');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Bring in User and Thought models
 const { User, Thought } = require('./models');
 
 app.use(express.urlencoded({ extended: true }));
@@ -85,15 +86,19 @@ app.delete('/api/users/:id', ({ params }, res) => {
           res.json({ message: 'No user found with this id!' });
           return;
         }
-        res.json(dbUser);
+        
         // Bonus - Delete associated thoughts from this user
-        Thought.find({username: dbUser.username}).remove();
+        Thought.remove({username: dbUser.username})
+        //.then(del => console.log(del)); // Use to see deletedCount
+
+        res.status('200').json({message: 'User and associated thoughts successfully deleted!'});
       })
       .catch(err => {
         res.json(err);
       });
 });
 // End of User Routes
+
 
 //////////////////////////////
 // Friend Routes
@@ -132,7 +137,7 @@ app.delete('/api/users/:id/friends/:friendId', ({ params, body }, res) => {
           res.json({ message: 'No user found with this id!' });
           return;
         }
-        res.json(dbUser);
+        res.status('200').json({message: 'Friend successfully deleted!'});
       })
       .catch(err => {
         res.json(err);
@@ -214,7 +219,7 @@ app.delete('/api/thoughts/:id', ({ params }, res) => {
           res.json({ message: 'No thought record found with this id!' });
           return;
         }
-        res.json(dbThought);
+        res.status('200').json({message: 'Thought successfully deleted!'});
       })
       .catch(err => {
         res.json(err);
@@ -255,7 +260,7 @@ app.delete('/api/thoughts/:thoughtId/reactions/:reactionId', ({ params }, res) =
           res.json({ message: 'No thought found with this id!' });
           return;
         }
-        res.json(dbThought);
+        res.status('200').json({message: 'Reaction successfully deleted!'});
       })
       .catch(err => {
         res.json(err);
