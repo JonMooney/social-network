@@ -22,7 +22,7 @@ const reactionSchema = new Schema({
       default: Date.now,
       // Getter method
       get: (date) => {
-        if (date) return date.toISOString().split("T") [0];
+        if (date) return `${date.toDateString()} at ${date.toLocaleTimeString()}`
       },
   }
 },

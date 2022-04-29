@@ -242,9 +242,26 @@ app.post('/api/thoughts/:thoughtId/reactions', ({ body, params }, res) => {
         });
 });
 
-
 // DELETE Reaction by the reactionId
-
+app.delete('/api/thoughts/:thoughtId/reactions/:reactionId', ({ params }, res) => {
+    Thought.findOneAndUpdate(
+        { _id: params.thoughtId },
+        // Pull method pulls a single item from the array
+        { $pull: { reactions: { reactionId: params.reactionId } } },
+        { new: true }
+      )
+      .then(dbThought => {
+        if (!dbThought) {
+          res.json({ message: 'No thought found with this id!' });
+          return;
+        }
+        res.json(dbThought);
+      })
+      .catch(err => {
+        res.json(err);
+      });
+});
+// End of Reaction Routes
 
 
 // Start server and listen
