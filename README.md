@@ -38,7 +38,7 @@ This is a social networking application that uses MongoDB to store users, though
 
 ### Screenshot:
 
-![Screenshot](./assets/images/nosql.jpg)
+![Screenshot](./assets/images/nosql2.jpg)
 
 ### Video Walkthrough:
 
