@@ -40,9 +40,13 @@ This is a social networking application that uses MongoDB to store users, though
 
 ![Screenshot](./assets/images/nosql2.jpg)
 
-### Video Walkthrough:
+### Video Walkthrough - Part 1:
 
-[Video Walkthrough](./assets/video/readme-walkthrough.mp4)
+[Video Walkthrough](./assets/video/Social-Network-1.mp4)
+
+### Video Walkthrough - Part 2:
+
+[Video Walkthrough](./assets/video/Social-Network-2.mp4)
 
 ## License
 
